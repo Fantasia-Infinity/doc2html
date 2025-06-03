@@ -1,0 +1,131 @@
+/* Shared CSS for both templates - Gruvbox dark theme */
+:root {
+    --global-font-size: 15px;
+    --global-line-height: 1.4em;
+    --global-space: 10px;
+    --font-stack: "Menlo", "Monaco", "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
+    --mono-font-stack: "Menlo", "Monaco", "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
+    
+    /* Gruvbox dark colors */
+    --gb-dm-bg0: #282828;
+    --gb-dm-bg0-hard: #1d2021;
+    --gb-dm-bg1: #3c3836;
+    --gb-dm-bg2: #504945;
+    --gb-dm-bg3: #665c54;
+    --gb-dm-fg0: #fbf1c7;
+    --gb-dm-fg1: #ebdbb2;
+    --gb-dm-fg2: #d5c4a1;
+    --gb-dm-fg3: #bdae93;
+    --gb-dm-fg4: #a89984;
+    --gb-dm-light-red: #fb4934;
+    --gb-dm-light-green: #b8bb26;
+    --gb-dm-light-yellow: #fabd2f;
+    --gb-dm-light-blue: #83a598;
+    --gb-dm-light-purple: #d3869b;
+    --gb-dm-light-aqua: #8ec07c;
+    --gb-dm-light-orange: #fe8019;
+    
+    --background-color: var(--gb-dm-bg0);
+    --font-color: var(--gb-dm-fg1);
+    --invert-font-color: var(--gb-dm-bg0-hard);
+    --primary-color: var(--gb-dm-light-yellow);
+    --secondary-color: var(--gb-dm-fg3);
+    --error-color: var(--gb-dm-light-red);
+    --code-bg-color: var(--gb-dm-bg2);
+    --border-color: var(--gb-dm-bg3);
+}
+
+* {
+    box-sizing: border-box;
+    text-rendering: geometricprecision;
+}
+
+*::selection {
+    background: var(--primary-color);
+    color: var(--invert-font-color);
+}
+
+body {
+    font-size: var(--global-font-size);
+    color: var(--font-color);
+    line-height: var(--global-line-height);
+    margin: 0;
+    padding: 20px;
+    font-family: var(--font-stack);
+    word-wrap: break-word;
+    background-color: var(--background-color);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    line-height: var(--global-line-height);
+    font-weight: 600;
+    font-family: var(--mono-font-stack);
+    margin-top: calc(var(--global-space) * 3);
+    margin-bottom: var(--global-line-height);
+}
+
+h1 {
+    color: var(--gb-dm-light-purple);
+    position: relative;
+    padding: calc(var(--global-space) * 2) 0;
+    margin: 0 0 calc(var(--global-space) * 2) 0;
+    overflow: hidden;
+    font-size: 2.2em;
+}
+
+h1::after {
+    content: "====================================================================================================";
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    color: var(--border-color);
+    font-size: 0.4em;
+    display: block;
+}
+
+h2 {
+    color: var(--gb-dm-light-blue);
+    font-size: 1.6em;
+}
+
+h3 {
+    color: var(--gb-dm-light-aqua);
+    font-size: 1.4em;
+}
+
+h4, h5, h6 {
+    color: var(--font-color);
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover {
+    background-color: var(--primary-color);
+    color: var(--invert-font-color);
+}
+
+.footer {
+    margin-top: calc(var(--global-space) * 5);
+    padding-top: calc(var(--global-space) * 2);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    color: var(--secondary-color);
+    font-size: 14px;
+    font-family: var(--mono-font-stack);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 10px;
+    }
+}

@@ -31,6 +31,8 @@ class MarkdownToHtmlConverter:
         self.output_dir = Path(output_dir) if output_dir else self.source_dir / "html_output"
         self.md_files = []
         self.directory_structure = {}
+        self.successful_conversions = 0
+        self.failed_conversions = 0
         
         # 确保输出目录存在
         self.output_dir.mkdir(exist_ok=True)
@@ -118,7 +120,7 @@ class MarkdownToHtmlConverter:
                     
                     self.md_files.append(file_info)
         
-        print(f"找到 {len(self.md_files)} 个 Markdown 文件")
+        print(f"找到 {len(self.md_files)} 篇文章")
         
         # 构建目录结构
         self._build_directory_structure()
@@ -172,7 +174,7 @@ class MarkdownToHtmlConverter:
             # 计算相对于根目录的深度，用于生成正确的返回索引链接
             depth = len(file_info['relative_path'].parts) - 1
             index_path = "../" * depth + "index.html" if depth > 0 else "index.html"
-            back_link = f'<a href="{index_path}" class="back-to-index"> 返回索引</a>'
+            back_link = f'<a href="{index_path}" class="back-to-index"> 返回首页</a>'
             
             # 生成完整的HTML
             full_html = self.html_template.format(
@@ -195,7 +197,7 @@ class MarkdownToHtmlConverter:
             with open(output_file, 'w', encoding='utf-8') as f:
                 f.write(full_html)
             
-            print(f"✅ 转换完成: {file_info['relative_path']} -> {output_relative_path}")
+            print(f"✅ 发布完成: {file_info['relative_path']} -> {output_relative_path}")
             
             # 将生成的文件路径保存到file_info中以便索引页面使用
             file_info['html_relative_path'] = output_relative_path
@@ -203,7 +205,7 @@ class MarkdownToHtmlConverter:
             return str(output_relative_path)
             
         except Exception as e:
-            print(f"❌ 转换失败: {file_info['relative_path']} - {str(e)}")
+            print(f"❌ 发布失败: {file_info['relative_path']} - {str(e)}")
             return None
 
     def _generate_breadcrumb(self, relative_path: Path) -> str:
@@ -240,8 +242,8 @@ class MarkdownToHtmlConverter:
         return html
 
     def generate_index_page(self) -> None:
-        """生成索引页面"""
-        print("正在生成索引页面...")
+        """生成博客首页"""
+        print("正在生成博客首页...")
         
         # 生成文件卡片
         file_cards = ""
@@ -300,13 +302,10 @@ class MarkdownToHtmlConverter:
         
         # 生成索引页面
         index_html = self.index_template.format(
-            source_dir=self.source_dir,
             total_files=len(self.md_files),
-            total_dirs=total_dirs,
-            total_size=size_str,
-            generation_time=generation_time,
-            directory_tree=directory_tree_html,
-            file_cards=file_cards,
+            successful_files=self.successful_conversions,
+            failed_files=self.failed_conversions,
+            file_list=directory_tree_html,
             timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         )
         
@@ -315,30 +314,30 @@ class MarkdownToHtmlConverter:
         with open(index_file, 'w', encoding='utf-8') as f:
             f.write(index_html)
         
-        print(f"✅ 索引页面生成完成: {index_file}")
+        print(f"✅ 博客首页生成完成: {index_file}")
 
     def convert_all(self) -> None:
         """转换所有文件"""
-        print("开始转换所有Markdown文件...")
+        print("开始发布所有文章...")
         
-        successful_conversions = 0
-        failed_conversions = 0
+        self.successful_conversions = 0
+        self.failed_conversions = 0
         
         for file_info in self.md_files:
             result = self.convert_file(file_info)
             if result:
-                successful_conversions += 1
+                self.successful_conversions += 1
             else:
-                failed_conversions += 1
+                self.failed_conversions += 1
         
-        print(f"\n转换完成!")
-        print(f"✅ 成功: {successful_conversions} 个文件")
-        print(f"❌ 失败: {failed_conversions} 个文件")
+        print(f"\n发布完成!")
+        print(f"✅ 成功: {self.successful_conversions} 篇文章")
+        print(f"❌ 失败: {self.failed_conversions} 篇文章")
         print(f"📁 输出目录: {self.output_dir}")
 
     def run(self) -> None:
         """运行转换流程"""
-        print("=== Markdown to HTML 转换器 ===\n")
+        print("=== 📝 个人博客生成器 ===\n")
         
         # 1. 扫描目录建立索引
         self.scan_directory()
