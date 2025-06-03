@@ -48,6 +48,15 @@ class MarkdownToHtmlConverter:
             'attr_list'
         ]
         
+        # TOC配置
+        self.md_extension_configs = {
+            'toc': {
+                'anchorlink': True,
+                'baselevel': 1,
+                'permalink': True
+            }
+        }
+        
         # 加载HTML模板
         self._load_templates()
 
@@ -141,7 +150,10 @@ class MarkdownToHtmlConverter:
                 md_content = f.read()
             
             # 创建markdown实例
-            md = markdown.Markdown(extensions=self.md_extensions)
+            md = markdown.Markdown(
+                extensions=self.md_extensions,
+                extension_configs=self.md_extension_configs
+            )
             
             # 转换为HTML
             html_content = md.convert(md_content)
@@ -150,12 +162,17 @@ class MarkdownToHtmlConverter:
             toc_html = ""
             if hasattr(md, 'toc') and md.toc:
                 toc_html = f'<div class="toc"><h3>目录</h3>{md.toc}</div>'
+            else:
+                # 如果没有目录，显示空的占位符
+                toc_html = ''
             
             # 生成面包屑导航
             breadcrumb = self._generate_breadcrumb(file_info['relative_path'])
             
-            # 回到索引的链接
-            back_link = '<a href="index.html" class="back-to-index">📋 返回索引</a>'
+            # 计算相对于根目录的深度，用于生成正确的返回索引链接
+            depth = len(file_info['relative_path'].parts) - 1
+            index_path = "../" * depth + "index.html" if depth > 0 else "index.html"
+            back_link = f'<a href="{index_path}" class="back-to-index">📋 返回索引</a>'
             
             # 生成完整的HTML
             full_html = self.html_template.format(
@@ -167,10 +184,9 @@ class MarkdownToHtmlConverter:
                 timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             )
             
-            # 生成唯一的文件名 - 使用相对路径的hash来避免重名
-            path_hash = hashlib.md5(str(file_info['relative_path']).encode()).hexdigest()[:8]
-            output_filename = f"{file_info['name']}_{path_hash}.html"
-            output_file = self.output_dir / output_filename
+            # 保持目录结构 - 将.md扩展名替换为.html
+            output_relative_path = file_info['relative_path'].with_suffix('.html')
+            output_file = self.output_dir / output_relative_path
             
             # 确保输出目录存在
             output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -179,12 +195,12 @@ class MarkdownToHtmlConverter:
             with open(output_file, 'w', encoding='utf-8') as f:
                 f.write(full_html)
             
-            print(f"✅ 转换完成: {file_info['relative_path']} -> {output_file.name}")
+            print(f"✅ 转换完成: {file_info['relative_path']} -> {output_relative_path}")
             
-            # 将生成的文件名保存到file_info中以便索引页面使用
-            file_info['html_filename'] = output_filename
+            # 将生成的文件路径保存到file_info中以便索引页面使用
+            file_info['html_relative_path'] = output_relative_path
             
-            return output_filename
+            return str(output_relative_path)
             
         except Exception as e:
             print(f"❌ 转换失败: {file_info['relative_path']} - {str(e)}")
@@ -209,8 +225,8 @@ class MarkdownToHtmlConverter:
             if key == 'files':
                 # 显示文件
                 for file_info in value:
-                    html_filename = file_info.get('html_filename', f"{file_info['name']}.html")
-                    file_link = f'<a href="{html_filename}">{file_info["relative_path"].name}</a>'
+                    html_relative_path = file_info.get('html_relative_path', f"{file_info['name']}.html")
+                    file_link = f'<a href="{html_relative_path}">{file_info["relative_path"].name}</a>'
                     html += f'<div class="tree-item tree-file">{prefix}📄 {file_link}</div>\n'
             else:
                 # 显示目录
@@ -241,7 +257,7 @@ class MarkdownToHtmlConverter:
             file_card = f"""
             <div class="file-card">
                 <div class="file-title">
-                    <a href="{file_info.get('html_filename', f'{file_info["name"]}.html')}">📄 {file_info['name']}</a>
+                    <a href="{file_info.get('html_relative_path', f'{file_info["name"]}.html')}">📄 {file_info['name']}</a>
                 </div>
                 <div class="file-path">{file_info['relative_path']}</div>
                 <div class="file-info">
