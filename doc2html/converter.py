@@ -226,11 +226,15 @@ class MarkdownToHtmlConverter:
                 # 显示文件
                 for file_info in value:
                     html_relative_path = file_info.get('html_relative_path', f"{file_info['name']}.html")
-                    file_link = f'<a href="{html_relative_path}">{file_info["relative_path"].name}</a>'
-                    html += f'<div class="tree-item tree-file">{prefix}📄 {file_link}</div>\n'
+                    # 生成显示名称（去除.md后缀）
+                    display_name = file_info["relative_path"].name
+                    if display_name.endswith('.md'):
+                        display_name = file_info["relative_path"].stem
+                    file_link = f'<a href="{html_relative_path}">{display_name}</a>'
+                    html += f'<div class="tree-item tree-file">{prefix} {file_link}</div>\n'
             else:
                 # 显示目录
-                html += f'<div class="tree-item tree-folder">{prefix}📁 {key}/</div>\n'
+                html += f'<div class="tree-item tree-folder">{prefix} {key}/</div>\n'
                 html += self._generate_directory_tree_html(value, prefix + "  ")
         
         return html
@@ -254,10 +258,15 @@ class MarkdownToHtmlConverter:
             except:
                 preview = "无法读取预览"
             
+            # 生成显示名称（去除.md后缀）
+            display_name = file_info['name']
+            if file_info['relative_path'].name.endswith('.md'):
+                display_name = file_info['relative_path'].stem
+            
             file_card = f"""
             <div class="file-card">
                 <div class="file-title">
-                    <a href="{file_info.get('html_relative_path', f'{file_info["name"]}.html')}"> {file_info['name']}</a>
+                    <a href="{file_info.get('html_relative_path', f'{file_info["name"]}.html')}"> {display_name}</a>
                 </div>
                 <div class="file-path">{file_info['relative_path']}</div>
                 <div class="file-info">
