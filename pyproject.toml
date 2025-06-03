@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "doc2html"
+dynamic = ["version"]
+description = "A tool to convert Markdown documents to HTML with beautiful styling"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "MIT"}
+authors = [
+    {name = "Fantasia-Infinity"},
+]
+keywords = ["markdown", "html", "converter", "documentation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Documentation",
+    "Topic :: Text Processing :: Markup :: HTML",
+    "Topic :: Text Processing :: Markup :: Markdown",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "markdown>=3.0.0",
+    "pygments>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "black>=21.0",
+    "flake8>=3.8",
+    "twine>=3.0",
+    "build>=0.7.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Fantasia-Infinity/doc2html"
+"Bug Reports" = "https://github.com/Fantasia-Infinity/doc2html/issues"
+Source = "https://github.com/Fantasia-Infinity/doc2html"
+Documentation = "https://github.com/Fantasia-Infinity/doc2html#readme"
+
+[project.scripts]
+doc2html = "doc2html.cli:main"
+md2html = "doc2html.cli:main"
+
+[tool.setuptools]
+packages = ["doc2html"]
+
+[tool.setuptools.package-data]
+doc2html = ["templates/*.html"]
+
+[tool.setuptools.dynamic]
+version = {attr = "doc2html.__version__.__version__"}

@@ -1,0 +1,8 @@
+include README.md
+include LICENSE
+include MANIFEST.in
+recursive-include doc2html/templates *.html
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * *.so
+recursive-exclude * .DS_Store
