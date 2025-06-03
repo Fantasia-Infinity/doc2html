@@ -210,7 +210,11 @@ class MarkdownToHtmlConverter:
 
     def _generate_breadcrumb(self, relative_path: Path) -> str:
         """生成面包屑导航"""
-        parts = ['<a href="index.html">首页</a>']
+        # 计算相对于根目录的深度，用于生成正确的返回索引链接
+        depth = len(relative_path.parent.parts)
+        index_path = "../" * depth + "index.html" if depth > 0 else "index.html"
+        
+        parts = [f'<a href="{index_path}">首页</a>']
         
         if relative_path.parent != Path('.'):
             for part in relative_path.parent.parts:
@@ -275,7 +279,7 @@ class MarkdownToHtmlConverter:
                     大小: {file_info['size']} 字节 | 
                     修改时间: {file_info['modified'].strftime('%Y-%m-%d %H:%M')}
                 </div>
-                <div style="margin-top: 10px; font-size: 14px; color: #666;">
+                <div style="margin-top: 12px; font-size: 16px; color: #666;">
                     {preview}
                 </div>
             </div>
