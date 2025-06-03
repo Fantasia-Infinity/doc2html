@@ -172,7 +172,7 @@ class MarkdownToHtmlConverter:
             # 计算相对于根目录的深度，用于生成正确的返回索引链接
             depth = len(file_info['relative_path'].parts) - 1
             index_path = "../" * depth + "index.html" if depth > 0 else "index.html"
-            back_link = f'<a href="{index_path}" class="back-to-index">📋 返回索引</a>'
+            back_link = f'<a href="{index_path}" class="back-to-index"> 返回索引</a>'
             
             # 生成完整的HTML
             full_html = self.html_template.format(
@@ -257,7 +257,7 @@ class MarkdownToHtmlConverter:
             file_card = f"""
             <div class="file-card">
                 <div class="file-title">
-                    <a href="{file_info.get('html_relative_path', f'{file_info["name"]}.html')}">📄 {file_info['name']}</a>
+                    <a href="{file_info.get('html_relative_path', f'{file_info["name"]}.html')}"> {file_info['name']}</a>
                 </div>
                 <div class="file-path">{file_info['relative_path']}</div>
                 <div class="file-info">
