@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0">
+    <title>{title}</title>
+    <style>
+        /* Terminal.css inspired theme with dark gruvbox palette - simplified */
+        :root {{
+            --global-font-size: 22px;
+            --global-line-height: 1.7;
+            --global-space: 10px;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --mono-font-stack: "SF Mono", "Menlo", "Monaco", "Consolas", monospace;
+            
+            /* Gruvbox dark colors - simplified palette */
+            --bg-color: #282828;
+            --bg-color-light: #3c3836;
+            --text-color: #ebdbb2;
+            --text-muted: #a89984;
+            --accent-color: #fabd2f;
+            --border-color: #504945;
+            --code-bg: #32302f;
+            --heading-color: #83a598;
+        }}
+        
+        * {{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }}
+        
+        body {{
+            font-size: var(--global-font-size);
+            color: var(--text-color);
+            line-height: var(--global-line-height);
+            background-color: var(--bg-color);
+            font-family: var(--font-stack);
+            padding: 15px;
+            letter-spacing: 0.01em;
+        }}
+        
+        .container {{
+            max-width: 1000px;
+            margin: 0 auto;
+        }}
+        
+        .header {{
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+        }}
+        
+        .breadcrumb {{
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-family: var(--mono-font-stack);
+        }}
+        
+        .breadcrumb a {{
+            color: var(--accent-color);
+            text-decoration: none;
+        }}
+        
+        .back-link {{
+            display: inline-block;
+            margin: 18px 0;
+            padding: 8px 14px;
+            background-color: transparent;
+            color: var(--accent-color);
+            text-decoration: none;
+            border-radius: 3px;
+            font-size: 14px;
+            border: 1px solid var(--accent-color);
+            transition: all 0.2s ease;
+        }}
+        
+        .back-link:hover {{
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+        }}
+        
+        h1, h2, h3, h4, h5, h6 {{
+            margin-top: 32px;
+            margin-bottom: 16px;
+            font-weight: 500;
+            line-height: 1.25;
+        }}
+        
+        h1 {{
+            color: var(--heading-color);
+            font-size: 1.8em;
+            font-weight: 400;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }}
+        
+        h2 {{
+            color: var(--heading-color);
+            font-size: 1.4em;
+            font-weight: 400;
+        }}
+        
+        h3 {{
+            color: var(--heading-color);
+            font-size: 1.2em;
+            font-weight: 400;
+        }}
+        
+        a {{
+            color: var(--accent-color);
+            text-decoration: none;
+        }}
+        
+        p, ul, ol {{
+            margin-bottom: 16px;
+        }}
+        
+        code {{
+            font-family: var(--mono-font-stack);
+            background-color: var(--code-bg);
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-size: 0.9em;
+        }}
+        
+        pre {{
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 2px;
+            margin: 16px 0;
+            overflow-x: auto;
+        }}
+        
+        pre code {{
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+        }}
+        
+        blockquote {{
+            border-left: 3px solid var(--border-color);
+            padding-left: 16px;
+            color: var(--text-muted);
+            margin: 16px 0;
+        }}
+        
+        table {{
+            border-collapse: collapse;
+            width: 100%;
+            margin: 16px 0;
+        }}
+        
+        th, td {{
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: left;
+        }}
+        
+        th {{
+            background-color: var(--bg-color-light);
+            font-weight: 500;
+        }}
+        
+        /* Layout */
+        .main-layout {{
+            display: flex;
+            gap: 36px;
+        }}
+        
+        .sidebar {{
+            width: 230px;
+            flex-shrink: 0;
+        }}
+        
+        .main-content {{
+            flex: 1;
+            min-width: 0;
+        }}
+        
+        /* TOC */
+        .toc {{
+            background-color: var(--bg-color-light);
+            border-radius: 4px;
+            padding: 18px;
+            position: sticky;
+            top: 18px;
+            font-size: 14px;
+            max-height: calc(100vh - 70px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) var(--bg-color-light);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }}
+        
+        .toc h3 {{
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }}
+        
+        .toc ul {{
+            list-style-type: none;
+        }}
+        
+        .toc li {{
+            margin: 6px 0;
+        }}
+        
+        .toc a {{
+            color: var(--text-color);
+            display: block;
+            padding: 3px 6px;
+            border-radius: 3px;
+        }}
+        
+        .toc a:hover {{
+            background-color: var(--border-color);
+        }}
+        
+        .footer {{
+            margin-top: 40px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }}
+        
+        /* Responsive */
+        @media (max-width: 768px) {{
+            .main-layout {{
+                flex-direction: column;
+            }}
+            
+            .sidebar {{
+                width: 100%;
+                order: -1;
+            }}
+            
+            .toc {{
+                position: static;
+                max-height: none;
+            }}
+        }}
+    </style>
+    <script>
+        // 检查是否有目录内容，如果没有则隐藏侧边栏
+        document.addEventListener('DOMContentLoaded', function() {{
+            const sidebar = document.querySelector('.sidebar');
+            const mainContent = document.querySelector('.main-content');
+            const tocDiv = sidebar.querySelector('.toc');
+            
+            // 如果目录为空或者没有ul元素，则隐藏侧边栏
+            if (!tocDiv || tocDiv.innerHTML.trim() === '' || !tocDiv.querySelector('ul')) {{
+                sidebar.style.display = 'none';
+                mainContent.style.maxWidth = '1000px';
+            }}
+        }});
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="breadcrumb">{breadcrumb}</div>
+            <h1>{title}</h1>
+            {back_link}
+        </div>
+        
+        <div class="main-layout">
+            <div class="sidebar">
+                {toc}
+            </div>
+            
+            <div class="main-content">
+                <div class="content">
+                    {content}
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            发布时间: {timestamp} | 翠玉录
+        </div>
+    </div>
+</body>
+</html>

@@ -35,10 +35,7 @@ ENV/
 # macOS
 .DS_Store
 
-# Output files
-output/
-*.html
-!templates/*.html
+
 
 # Temporary files
 *.tmp
